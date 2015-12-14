@@ -1,12 +1,15 @@
 package com.svv.dto;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Created by vsabadosh on 17/11/15.
  */
-@XmlRootElement
-public class Album {
+@XmlRootElement(name = "album")
+@JsonTypeName("album")
+public class Album extends Entity {
 
     private String id;
     private String title;

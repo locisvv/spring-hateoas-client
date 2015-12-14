@@ -4,14 +4,16 @@ package com.svv.dto;
  * Created by vsabadosh on 17/11/15.
 */
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Music Artist/Group.
- *
  */
-@XmlRootElement()
-public class Artist {
+@XmlRootElement(name = "artist")
+@JsonTypeName("artist")
+public class Artist extends Entity {
 
     private String id;
     private String name;
