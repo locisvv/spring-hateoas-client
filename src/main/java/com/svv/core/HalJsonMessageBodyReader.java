@@ -3,12 +3,11 @@ package com.svv.core;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.TokenBuffer;
 import com.svv.providers.HalJsonMapperProvider;
+import org.reflections.Reflections;
 import org.springframework.hateoas.hal.Jackson2HalModule;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
@@ -32,12 +31,14 @@ import java.util.*;
 @Consumes({"application/hal+json"})
 public class HalJsonMessageBodyReader implements MessageBodyReader<HalResource> {
 
+    private Map<String, Class> rootRelationMap;
     private HalJsonMapperProvider mapperProvider;
     private Jackson2HalModule.HalLinkListDeserializer linkDeserializer;
 
     public HalJsonMessageBodyReader() {
         mapperProvider = new HalJsonMapperProvider();
         linkDeserializer = new Jackson2HalModule.HalLinkListDeserializer();
+        rootRelationMap = getRelationsByTypeAnnotation();
     }
 
     @Override
@@ -98,31 +99,20 @@ public class HalJsonMessageBodyReader implements MessageBodyReader<HalResource> 
             }
 
             String relation = jp.getCurrentName();
-
+            Class embeddedType = getEmbeddedType(relation, relMap);
             Object value;
             if (JsonToken.START_ARRAY.equals(jp.nextToken())) {
-                ParameterizedTypeImpl relationType = (ParameterizedTypeImpl) relMap.get(relation);
                 List<HalResource> halResources = new ArrayList<HalResource>();
-
                 while (!JsonToken.END_ARRAY.equals(jp.nextToken())) {
-                    halResources.add(parseHalResource(objectMapper, jp, (Class) relationType.getActualTypeArguments()[0]));
+                    halResources.add(parseHalResource(objectMapper, jp, embeddedType));
                 }
                 value = halResources;
             } else {
-                value = parseHalResource(objectMapper, jp, (Class) relMap.get(relation));
+                value = parseHalResource(objectMapper, jp, embeddedType);
             }
             result.put(relation, value);
         }
         return result;
-    }
-
-    private JavaType getEmbeddedType(TypeFactory typeFactory, ParameterizedTypeImpl type) {
-        if(Collection.class.isAssignableFrom(type.getRawType())) {
-            JavaType itemType = typeFactory.constructParametricType(HalResource.class, (Class) type.getActualTypeArguments()[0]);
-            return typeFactory.constructCollectionType((Class) type.getRawType(), itemType);
-        } else {
-            return typeFactory.constructParametricType(HalResource.class, (Class) type.getRawType());
-        }
     }
 
     private void initForReading(JsonParser jp) throws IOException {
@@ -142,5 +132,35 @@ public class HalJsonMessageBodyReader implements MessageBodyReader<HalResource> 
             }
         }
         return relMap;
+    }
+
+    private Map<String, Class> getRelationsByTypeAnnotation() {
+        Map<String, Class> result = new HashMap<String, Class>();
+
+        Reflections reflections = new Reflections("com.svv.dto");
+        Set<Class<?>> annotatedClasses = reflections.getTypesAnnotatedWith(Relation.class);
+        for (Class<?> aClass : annotatedClasses) {
+            Relation annotation = aClass.getAnnotation(Relation.class);
+            result.put(annotation.value(), aClass);
+            result.put(annotation.collection(), aClass);
+        }
+        return result;
+    }
+
+    public Class getEmbeddedType(String relation, Map<String, Type> relMap) {
+
+        if (relMap.get(relation) != null) {
+            if (relMap.get(relation) instanceof ParameterizedTypeImpl) {
+                ParameterizedTypeImpl relationType = (ParameterizedTypeImpl) relMap.get(relation);
+                if (Collection.class.isAssignableFrom(relationType.getRawType())) {
+                    return (Class) relationType.getActualTypeArguments()[0];
+                }
+                return relationType.getRawType();
+            } else {
+                return (Class)relMap.get(relation);
+            }
+        }
+
+        return rootRelationMap.get(relation);
     }
 }

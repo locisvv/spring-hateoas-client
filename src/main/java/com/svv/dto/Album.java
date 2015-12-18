@@ -36,7 +36,7 @@ public class Album extends ClientResource {
         return title;
     }
 
-    @Relation(value = "artist")
+//    @Relation(value = "artist")
     public Artist getArtist() {
         return artist;
     }
