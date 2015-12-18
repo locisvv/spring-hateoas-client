@@ -1,27 +1,29 @@
 package com.svv.dto;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.svv.core.Relation;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
 /**
  * Created by vsabadosh on 17/11/15.
  */
-@XmlRootElement(name = "album")
-@JsonTypeName("album")
-public class Album extends Entity {
+@XmlRootElement
+public class Album extends ClientResource {
 
     private String id;
     private String title;
-    private String artistId;
     private int stockLevel;
+    private Artist artist;
+    private List<Musician> musicians;
 
     public Album() {}
 
-    public Album(String id, String title, String artistId, int stockLevel) {
+    public Album(String id, String title, int stockLevel) {
         this.id = id;
         this.title = title;
-        this.artistId = artistId;
         this.stockLevel = stockLevel;
     }
 
@@ -33,8 +35,9 @@ public class Album extends Entity {
         return title;
     }
 
-    public String getArtistId() {
-        return artistId;
+    @Relation(value = "artist")
+    public Artist getArtist() {
+        return artist;
     }
 
     public int getStockLevel() {
@@ -45,8 +48,18 @@ public class Album extends Entity {
         this.stockLevel = stockLevel;
     }
 
-    public Album copyAlbum() {
-        return new Album(id, title, artistId, stockLevel);
+    @XmlElementWrapper(name = "musicians")
+    @XmlElement(name = "musician")
+    @Relation("musicians")
+    public List<Musician> getMusicians() {
+        return musicians;
     }
-    
+
+    public void setMusicians(List<Musician> musicians) {
+        this.musicians = musicians;
+    }
+
+    public Album copyAlbum() {
+        return new Album(id, title, stockLevel);
+    }
 }

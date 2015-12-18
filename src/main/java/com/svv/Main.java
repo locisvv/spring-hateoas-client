@@ -1,10 +1,8 @@
 package com.svv;
 
 import com.svv.dto.Album;
-import com.svv.dto.Entity;
 import com.svv.jaxrs.HalResource;
 import com.svv.jaxrs.RestClient;
-import org.springframework.hateoas.Resource;
 
 import javax.ws.rs.core.GenericType;
 
@@ -18,7 +16,9 @@ public class Main {
         RestClient restClient = new RestClient();
 
         restClient.getRootTarget().path("albums/1").queryParam("embedded", true).request().accept("application/hal+json")
-                .get(new GenericType<HalResource<Album, Resource<Entity>>>() {});
+                .get(new GenericType<HalResource<Album>>() {});
 
+        restClient.getRootTarget().path("albums/1").queryParam("embedded", true).request().accept("application/hal+xml")
+                .get(new GenericType<Album>() {});
     }
 }
