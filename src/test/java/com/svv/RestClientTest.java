@@ -2,7 +2,7 @@
 //
 //import com.svv.dto.Album;
 //import com.svv.dto.Artist;
-//import com.svv.jaxrs.HalResource;
+//import com.svv.core.HalResource;
 //import com.svv.jaxrs.RestClient;
 //import org.junit.BeforeClass;
 //import org.junit.Test;

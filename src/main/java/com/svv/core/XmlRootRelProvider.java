@@ -1,4 +1,4 @@
-package com.svv.providers;
+package com.svv.core;
 
 import org.atteo.evo.inflector.English;
 import org.springframework.hateoas.RelProvider;

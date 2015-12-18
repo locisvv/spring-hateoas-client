@@ -1,5 +1,7 @@
 package com.svv.dto;
 
+import com.svv.core.Relation;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -9,6 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 
 @XmlRootElement
+@Relation(value = "musician", collection = "musicians")
 public class Musician extends ClientResource {
 
     private long id;

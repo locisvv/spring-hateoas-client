@@ -1,4 +1,4 @@
-package com.svv.jaxrs;
+package com.svv.core;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.TokenBuffer;
-import com.svv.core.Relation;
 import com.svv.providers.HalJsonMapperProvider;
 import org.springframework.hateoas.hal.Jackson2HalModule;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;

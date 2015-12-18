@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
+import com.svv.core.XmlRootRelProvider;
 import org.springframework.hateoas.hal.Jackson2HalModule;
 
 import javax.ws.rs.Consumes;

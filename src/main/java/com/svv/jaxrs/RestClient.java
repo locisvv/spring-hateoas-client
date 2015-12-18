@@ -2,6 +2,7 @@ package com.svv.jaxrs;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.fasterxml.jackson.jaxrs.xml.JacksonXMLProvider;
+import com.svv.core.HalJsonMessageBodyReader;
 import com.svv.providers.HalJsonMapperProvider;
 import com.svv.providers.HalJsonRepresentationTypeProvider;
 import com.svv.providers.HalXmlMapperProvider;

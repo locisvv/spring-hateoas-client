@@ -11,6 +11,7 @@ import java.util.List;
  * Created by vsabadosh on 17/11/15.
  */
 @XmlRootElement
+@Relation(value = "album", collection = "albums")
 public class Album extends ClientResource {
 
     private String id;

@@ -12,7 +12,7 @@ import static java.lang.annotation.RetentionPolicy.*;
  * @version $Id:
  * @since 17.12.2015
  */
-@Retention(RUNTIME) @Target({FIELD, METHOD})
+@Retention(RUNTIME) @Target({FIELD, METHOD, TYPE})
 public @interface Relation {
     String NO_RELATION = "";
 

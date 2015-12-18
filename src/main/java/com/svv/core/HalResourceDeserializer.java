@@ -1,4 +1,4 @@
-package com.svv.jaxrs;
+package com.svv.core;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;

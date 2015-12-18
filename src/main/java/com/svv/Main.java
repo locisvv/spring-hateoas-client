@@ -1,7 +1,7 @@
 package com.svv;
 
 import com.svv.dto.Album;
-import com.svv.jaxrs.HalResource;
+import com.svv.core.HalResource;
 import com.svv.jaxrs.RestClient;
 
 import javax.ws.rs.core.GenericType;
